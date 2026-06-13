@@ -14,5 +14,5 @@ Record the local GIF when `vhs` is installed:
 
 ```bash
 cargo build
-VHS_NO_SANDBOX=1 vhs demo/sounder-local.tape
+PATH="$PWD/target/debug:$PATH" VHS_NO_SANDBOX=1 vhs demo/sounder-local.tape
 ```
