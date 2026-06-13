@@ -6,10 +6,15 @@ A metadata-first Parquet inspector and dataset doctor for humans, CI, and AI age
 
 ```bash
 cargo install --path .
+
+# Inspect file metadata
 sounder inspect ./events.parquet
-sounder check ./events/
-sounder check s3://company-lake/events/dt=2026-06-11/
-sounder check ./events/ --agent
+
+# Peek at rows only when you ask to read data pages
+sounder inspect ./events.parquet --head 20
+
+# Check a dataset
+sounder check ./events/ --agent --format markdown
 ```
 
 ![Sounder demo](demo/sounder-local.gif)
@@ -34,14 +39,6 @@ sounder doctor <local-directory-or-s3-prefix>
 ```
 
 ## Output Modes
-
-Explicit row preview is available for local files and S3 objects:
-
-```bash
-sounder inspect ./events.parquet --head 20
-```
-
-Preview mode marks `data_pages_read: true` in JSON and agent output.
 
 Human text is the default:
 
@@ -78,6 +75,16 @@ sounder check ./out --details full
 ```
 
 `none` keeps only high-level artifact, scan, summary, finding, limit, warning, and error fields. `summary` is the default and bounds dataset file examples. `full` emits every collected detail within the configured scan limits.
+
+## Peek Rows
+
+Row preview is explicit and separate from dataset checks:
+
+```bash
+sounder inspect ./events.parquet --head 20
+```
+
+For local files and S3 objects, preview mode marks `data_pages_read: true` in JSON and agent output. S3 preview downloads object bytes and is bounded by `--max-bytes`.
 
 ## CI Policy
 
