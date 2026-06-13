@@ -80,6 +80,7 @@ sounder check ./out --details full
 
 Sounder is useful in agent workflows because it turns a Parquet file or dataset into bounded, stable evidence:
 
+- [`AGENTS.md`](AGENTS.md) gives agents a short operating guide for choosing commands, flags, and exit-code handling.
 - `--agent` emits compact JSON with `schema_version: "sounder.agent.v1"`, top findings, limits, and suggested next actions.
 - `--json` emits a fuller report with stable field names for scripts, CI, and tool calls.
 - Exit codes separate invalid input, missing data, S3 permission failures, scan limits, unreadable files, and policy failures.
