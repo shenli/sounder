@@ -76,6 +76,17 @@ sounder check ./out --details full
 
 `none` keeps only high-level artifact, scan, summary, finding, limit, warning, and error fields. `summary` is the default and bounds dataset file examples. `full` emits every collected detail within the configured scan limits.
 
+## Why Agents Use It
+
+Sounder is useful in agent workflows because it turns a Parquet file or dataset into bounded, stable evidence:
+
+- `--agent` emits compact JSON with `schema_version: "sounder.agent.v1"`, top findings, limits, and suggested next actions.
+- `--json` emits a fuller report with stable field names for scripts, CI, and tool calls.
+- Exit codes separate invalid input, missing data, S3 permission failures, scan limits, unreadable files, and policy failures.
+- Metadata-only defaults keep agent runs cheap and predictable; data pages are read only when `--head` is requested.
+- Guardrails such as `--max-files`, `--max-findings`, `--max-columns`, `--timeout`, `--max-requests`, and `--max-bytes` prevent runaway local or S3 scans.
+- Sounder does not call an LLM or external AI service. It is a deterministic inspection tool that agents can call and reason over.
+
 ## Peek Rows
 
 Row preview is explicit and separate from dataset checks:
