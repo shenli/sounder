@@ -1,0 +1,28 @@
+[package]
+name = "sounder"
+version = "0.1.0"
+edition = "2024"
+description = "Metadata-first Parquet inspector and dataset doctor for humans, CI, and agents"
+license = "MIT"
+repository = "https://github.com/shenli/sounder"
+homepage = "https://github.com/shenli/sounder"
+readme = "README.md"
+keywords = ["parquet", "s3", "cli", "data", "metadata"]
+categories = ["command-line-utilities", "development-tools"]
+
+[dependencies]
+anyhow = "1"
+bytes = "1"
+clap = { version = "4", features = ["derive"] }
+futures = "0.3"
+object_store = { version = "0.12.5", features = ["aws"] }
+parquet = "56"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+tokio = { version = "1", features = ["rt-multi-thread", "time"] }
+walkdir = "2"
+
+[dev-dependencies]
+arrow-array = "56"
+arrow-schema = "56"
+tempfile = "3"

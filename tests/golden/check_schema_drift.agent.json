@@ -1,0 +1,87 @@
+{
+  "schema_version": "sounder.agent.v1",
+  "command": "check",
+  "status": "error",
+  "artifact": {
+    "type": "parquet_dataset",
+    "uri": "$TMP",
+    "rows": 8,
+    "columns": 1,
+    "row_groups": 3,
+    "files_matched": 3,
+    "files_scanned": 3
+  },
+  "scan": {
+    "mode": "metadata_only",
+    "data_pages_read": false,
+    "complete": true,
+    "scan_truncated": false
+  },
+  "summary": "Dataset is readable, with 2 metadata findings across 3 scanned files.",
+  "top_findings": [
+    {
+      "id": "finding_001",
+      "type": "schema_drift",
+      "severity": "error",
+      "confidence": "high",
+      "message": "schema variant 2b39741eaed128c0 appears in 1 files; baseline 37bce8bd99adc50f appears in 2 files",
+      "location": {
+        "file": null,
+        "row_group": null,
+        "column": null
+      },
+      "evidence": {
+        "baseline_files": 2,
+        "schema_variants": 2,
+        "variant_files": 1
+      },
+      "suggested_action": "Compare writer schemas for the affected files or partition.",
+      "example_files": [
+        "$TMP/part-002.parquet"
+      ]
+    },
+    {
+      "id": "finding_002",
+      "type": "type_change",
+      "severity": "error",
+      "confidence": "high",
+      "message": "column user_id changed from int64:None:def0 to byte_array:Some(String):def0 in 1 files",
+      "location": {
+        "file": "$TMP/part-002.parquet",
+        "row_group": null,
+        "column": "user_id"
+      },
+      "evidence": {
+        "actual": "byte_array:Some(String):def0",
+        "affected_files": 1,
+        "expected": "int64:None:def0"
+      },
+      "suggested_action": "Compare writer schema serialization for this column across affected files.",
+      "example_files": [
+        "$TMP/part-002.parquet"
+      ]
+    }
+  ],
+  "recommended_next_actions": [
+    "Compare against a previous healthy partition or dataset.",
+    "Compare writer schema serialization for this column across affected files.",
+    "Compare writer schemas for the affected files or partition."
+  ],
+  "limits": {
+    "max_files": 1000,
+    "max_findings": 20,
+    "max_example_files": 5,
+    "max_columns": 80,
+    "timeout": "60s",
+    "max_requests": 2000,
+    "max_bytes": 67108864,
+    "s3_concurrency": 16,
+    "null_spike_ratio": 0.95,
+    "row_count_skew_factor": 8.0,
+    "minmax_outlier_factor": 100.0
+  },
+  "tool": {
+    "name": "sounder",
+    "version": "0.1.0"
+  }
+}

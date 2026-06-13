@@ -1,0 +1,26 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo fmt --check
+      - run: cargo check --locked
+      - run: cargo test --locked
+      - run: cargo test --locked --examples
+      - run: bash -n scripts/s3-integration-test.sh
+      - run: cargo package --locked --list
+      - run: cargo install --path . --locked --offline --root /tmp/sounder-install-smoke --force
+      - run: /tmp/sounder-install-smoke/bin/sounder version

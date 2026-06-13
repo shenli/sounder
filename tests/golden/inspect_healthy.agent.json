@@ -1,0 +1,41 @@
+{
+  "schema_version": "sounder.agent.v1",
+  "command": "inspect",
+  "status": "ok",
+  "artifact": {
+    "type": "parquet_file",
+    "uri": "$TMP/healthy.parquet",
+    "rows": 3,
+    "columns": 2,
+    "row_groups": 1,
+    "size_bytes": 784
+  },
+  "scan": {
+    "mode": "metadata_only",
+    "data_pages_read": false,
+    "complete": true,
+    "scan_truncated": false
+  },
+  "summary": "File is readable. No schema or metadata anomalies detected.",
+  "top_findings": [],
+  "recommended_next_actions": [
+    "If this file is generated, compare it against the expected schema or previous output."
+  ],
+  "limits": {
+    "max_files": 1000,
+    "max_findings": 20,
+    "max_example_files": 5,
+    "max_columns": 80,
+    "timeout": "60s",
+    "max_requests": 2000,
+    "max_bytes": 67108864,
+    "s3_concurrency": 16,
+    "null_spike_ratio": 0.95,
+    "row_count_skew_factor": 8.0,
+    "minmax_outlier_factor": 100.0
+  },
+  "tool": {
+    "name": "sounder",
+    "version": "0.1.0"
+  }
+}

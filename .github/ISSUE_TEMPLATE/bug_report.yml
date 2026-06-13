@@ -1,0 +1,52 @@
+name: Bug report
+description: Report incorrect output, failed scans, or broken CLI behavior.
+title: "Bug: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Include the command you ran and the observed output.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What should Sounder have reported instead?
+    validations:
+      required: true
+  - type: textarea
+    id: artifact
+    attributes:
+      label: Artifact shape
+      description: Local file, local directory, S3 object, or S3 prefix. Do not paste credentials or signed URLs.
+      placeholder: s3://bucket/prefix/ or ./dataset/
+    validations:
+      required: true
+  - type: textarea
+    id: output
+    attributes:
+      label: Sounder output
+      description: Prefer `--json --details none` output when possible.
+      render: shell
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: sounder 0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      options:
+        - macOS
+        - Linux
+        - Windows
+        - CI
+        - Other
+    validations:
+      required: true

@@ -1,0 +1,129 @@
+{
+  "schema_version": "sounder.report.v1",
+  "tool": {
+    "name": "sounder",
+    "version": "0.1.0"
+  },
+  "command": "inspect",
+  "status": "ok",
+  "artifact": {
+    "type": "parquet_file",
+    "uri": "$TMP/healthy.parquet",
+    "rows": 3,
+    "columns": 2,
+    "row_groups": 1,
+    "size_bytes": 784
+  },
+  "scan": {
+    "mode": "metadata_only",
+    "data_pages_read": false,
+    "complete": true,
+    "scan_truncated": false
+  },
+  "summary": {
+    "message": "File is readable. No schema or metadata anomalies detected.",
+    "rows": 3,
+    "columns": 2,
+    "files": 1,
+    "findings": 0
+  },
+  "schema": {
+    "column_count": 2,
+    "variants": 1,
+    "canonical": [
+      {
+        "name": "user_id",
+        "physical_type": "int64",
+        "logical_type": "None",
+        "max_definition_level": 0
+      },
+      {
+        "name": "country",
+        "physical_type": "byte_array",
+        "logical_type": "Some(String)",
+        "max_definition_level": 1
+      }
+    ]
+  },
+  "columns": [
+    {
+      "name": "country",
+      "physical_type": "byte_array",
+      "logical_type": "Some(String)",
+      "files_present": 1,
+      "row_groups_present": 1,
+      "row_groups_with_statistics": 1,
+      "row_groups_missing_statistics": 0,
+      "null_count": 0,
+      "min_value": "CA",
+      "max_value": "US",
+      "all_null_row_groups": 0,
+      "compression": [
+        "uncompressed"
+      ],
+      "encodings": [
+        "plain",
+        "rle",
+        "rle_dictionary"
+      ]
+    },
+    {
+      "name": "user_id",
+      "physical_type": "int64",
+      "logical_type": "None",
+      "files_present": 1,
+      "row_groups_present": 1,
+      "row_groups_with_statistics": 1,
+      "row_groups_missing_statistics": 0,
+      "null_count": 0,
+      "min_value": "1",
+      "max_value": "3",
+      "all_null_row_groups": 0,
+      "compression": [
+        "uncompressed"
+      ],
+      "encodings": [
+        "plain",
+        "rle",
+        "rle_dictionary"
+      ]
+    }
+  ],
+  "row_groups": {
+    "count": 1,
+    "min_rows": 3,
+    "median_rows": 3,
+    "max_rows": 3
+  },
+  "files": [
+    {
+      "uri": "$TMP/healthy.parquet",
+      "rows": 3,
+      "columns": 2,
+      "row_groups": 1,
+      "size_bytes": 784,
+      "created_by": "parquet-rs version 56.2.1",
+      "key_value_metadata": {
+        "ARROW:schema": "/////7wAAAAQAAAAAAAKAAwACgAJAAQACgAAABAAAAAAAQQACAAIAAAABAAIAAAABAAAAAIAAABUAAAAFAAAABAAFAAQAA4ADwAEAAAACAAQAAAAGAAAAAwAAAAAAAEFEAAAAAAAAAAEAAQABAAAAAcAAABjb3VudHJ5ABAAFAAQAAAADwAEAAAACAAQAAAAGAAAACAAAAAAAAACHAAAAAgADAAEAAsACAAAAEAAAAAAAAABAAAAAAcAAAB1c2VyX2lkAA=="
+      },
+      "schema_fingerprint": "8a12018fbbaf1a14",
+      "suspicious_reasons": []
+    }
+  ],
+  "findings": [],
+  "limits": {
+    "max_files": 1000,
+    "max_findings": 20,
+    "max_example_files": 5,
+    "max_columns": 80,
+    "timeout": "60s",
+    "max_requests": 2000,
+    "max_bytes": 67108864,
+    "s3_concurrency": 16,
+    "null_spike_ratio": 0.95,
+    "row_count_skew_factor": 8.0,
+    "minmax_outlier_factor": 100.0
+  },
+  "warnings": [],
+  "errors": []
+}
