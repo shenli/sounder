@@ -33,7 +33,7 @@ sounder check ./events/ --agent --format markdown
 
 ![Sounder demo](demo/sounder-local.gif)
 
-## Why Developers Use It
+## Use Cases
 
 Parquet failures often show up as vague downstream symptoms: a DuckDB query fails, a Spark job reads fewer rows than expected, or a model pipeline silently consumes a bad partition. Sounder gives you a fast metadata-level diagnosis before you reach for heavier tools.
 
@@ -82,7 +82,7 @@ sounder dataset <local-directory-or-s3-prefix>
 sounder doctor <local-directory-or-s3-prefix>
 ```
 
-## Why AI Agents Use It
+## For AI Agents
 
 Sounder is designed to be called as a deterministic tool by coding agents and workflow agents. Give an agent [`AGENTS.md`](AGENTS.md), then let it call `sounder` directly when it needs Parquet evidence.
 
