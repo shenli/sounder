@@ -1,11 +1,25 @@
 # Sounder
 
-Inspect Parquet files and check dataset health on local disk or S3 using metadata only.
+Metadata-first Parquet inspection for local files, datasets, and S3 prefixes.
 
-A metadata-first Parquet inspector and dataset doctor for humans, CI, and AI agents.
+Sounder is built for the first few minutes of debugging Parquet output. It answers the questions developers and agents ask before reaching for Spark, DuckDB, or a notebook:
+
+- What is in this file?
+- Did this dataset drift?
+- Which partition or file looks suspicious?
+- Is the evidence structured enough for CI or an AI agent to act on?
+
+It reads Parquet footers and row-group metadata by default, so checks stay fast and bounded. Data pages are read only when you explicitly ask to preview rows.
+
+## Quick Start
 
 ```bash
-cargo install --path .
+# Cargo
+cargo install sounder
+
+# Homebrew
+brew tap shenli/tap
+brew install sounder
 
 # Inspect file metadata
 sounder inspect ./events.parquet
@@ -19,7 +33,37 @@ sounder check ./events/ --agent --format markdown
 
 ![Sounder demo](demo/sounder-local.gif)
 
-Find schema drift, row-count skew, suspicious row groups, missing statistics, corrupt files, and simple min/max outliers without scanning data pages by default.
+## Why Developers Use It
+
+Parquet failures often show up as vague downstream symptoms: a DuckDB query fails, a Spark job reads fewer rows than expected, or a model pipeline silently consumes a bad partition. Sounder gives you a fast metadata-level diagnosis before you reach for heavier tools.
+
+- **Inspect without setup:** point `sounder inspect` at one Parquet file or S3 object and get rows, columns, row groups, compression, encodings, statistics coverage, and schema.
+- **Check a dataset as a dataset:** point `sounder check` at a directory or S3 prefix and Sounder recursively scans matching Parquet files as one logical output.
+- **Find common data-quality failures:** schema drift, missing columns, type changes, row-count skew, null spikes, all-null row groups, missing statistics, corrupt metadata, unreadable files, and simple min/max outliers.
+- **Use it in automation:** JSON, Markdown, stable exit codes, and policy flags make it fit CI jobs, PR comments, release checks, and agent workflows.
+- **Stay bounded on S3:** S3 scans are read-only and limited by file count, request count, byte count, concurrency, and timeout guardrails.
+
+## Common Workflows
+
+```bash
+# Debug one file
+sounder inspect ./events.parquet
+
+# Preview rows separately from health checks
+sounder inspect ./events.parquet --head 20
+
+# Check a local dataset
+sounder check ./events/
+
+# Check an S3 partition with explicit bounds
+sounder check s3://company-lake/events/dt=2026-06-11/ --max-files 200 --max-requests 500
+
+# Fail CI on policy findings
+sounder check ./events/ --json --fail-on schema-drift,corrupt-file --severity-threshold warning
+
+# Emit compact evidence for an AI agent
+sounder check ./events/ --agent
+```
 
 ## Commands
 
@@ -38,9 +82,29 @@ sounder dataset <local-directory-or-s3-prefix>
 sounder doctor <local-directory-or-s3-prefix>
 ```
 
+## Why AI Agents Use It
+
+Sounder is designed to be called as a deterministic tool by coding agents and workflow agents. Give an agent [`AGENTS.md`](AGENTS.md), then let it call `sounder` directly when it needs Parquet evidence.
+
+- [`AGENTS.md`](AGENTS.md) is a short operating guide for choosing commands, flags, and exit-code handling.
+- `--agent` emits compact JSON with `schema_version: "sounder.agent.v1"`, top findings, limits, and suggested next actions.
+- `--json` emits a fuller report with `schema_version: "sounder.report.v1"` and stable field names for tool calls.
+- Exit code `1` means the scan succeeded but findings violated policy; exit codes `2` through `7` represent operational failures or guardrails.
+- Guardrails such as `--max-files`, `--max-findings`, `--max-columns`, `--timeout`, `--max-requests`, and `--max-bytes` keep automated runs bounded.
+- Sounder does not call an LLM or external AI service. It returns evidence for an agent to reason over.
+
+Agent-oriented commands are intentionally boring:
+
+```bash
+sounder inspect ./events.parquet --agent
+sounder check ./events/ --agent
+sounder check ./events/ --json
+sounder check ./events/ --agent --format markdown
+```
+
 ## Output Modes
 
-Human text is the default:
+Human text is the default for local debugging:
 
 ```bash
 sounder check ./out
@@ -75,18 +139,6 @@ sounder check ./out --details full
 ```
 
 `none` keeps only high-level artifact, scan, summary, finding, limit, warning, and error fields. `summary` is the default and bounds dataset file examples. `full` emits every collected detail within the configured scan limits.
-
-## Why Agents Use It
-
-Sounder is useful in agent workflows because it turns a Parquet file or dataset into bounded, stable evidence:
-
-- [`AGENTS.md`](AGENTS.md) gives agents a short operating guide for choosing commands, flags, and exit-code handling.
-- `--agent` emits compact JSON with `schema_version: "sounder.agent.v1"`, top findings, limits, and suggested next actions.
-- `--json` emits a fuller report with stable field names for scripts, CI, and tool calls.
-- Exit codes separate invalid input, missing data, S3 permission failures, scan limits, unreadable files, and policy failures.
-- Metadata-only defaults keep agent runs cheap and predictable; data pages are read only when `--head` is requested.
-- Guardrails such as `--max-files`, `--max-findings`, `--max-columns`, `--timeout`, `--max-requests`, and `--max-bytes` prevent runaway local or S3 scans.
-- Sounder does not call an LLM or external AI service. It is a deterministic inspection tool that agents can call and reason over.
 
 ## Peek Rows
 
