@@ -248,17 +248,29 @@ If your shell has stale local proxy variables, run with `SOUNDER_AWS_DIRECT=1` t
 
 ## Install
 
+With Cargo:
+
+```bash
+cargo install sounder
+```
+
+With Homebrew:
+
+```bash
+brew install shenli/tap/sounder
+```
+
+Or tap once, then install by formula name:
+
+```bash
+brew tap shenli/tap
+brew install sounder
+```
+
 During local development:
 
 ```bash
 cargo install --path .
-```
-
-Planned release channels:
-
-```bash
-brew install sounder
-cargo install sounder
 ```
 
 Note: the PyPI package named `sounder` is unrelated. Do not use `pip install sounder` for this tool.
